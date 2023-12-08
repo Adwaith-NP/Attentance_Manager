@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "Manegar.apps.ManegarConfig",
     "User.apps.UserConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -124,3 +125,4 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = 'User.loginData'
 LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'manager:conveter'
