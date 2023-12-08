@@ -1,5 +1,7 @@
 <form method="post">
     {% csrf_token %}
-    {{ form }}
+    <input type="text" placeholder="username" name = "username">
+    <input type="text" placeholder="Name of the student" name = "name">
+    <input type="text" placeholder="Password" name = "password">
     <button type="submit">Submit</button>
 </form>

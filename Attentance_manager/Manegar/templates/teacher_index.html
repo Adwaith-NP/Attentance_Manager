@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block body %}
-<a href="{% url "" %}">
-<button>Add bach</button>
+<a href="{% url "manager:addData" %}">
+<button>Add subject</button>
 </a>
+<a href="{% url "UserApp:register" %}">
+    <button>Add students</button>
+    </a>
 {% endblock %}

@@ -17,3 +17,9 @@ def student(request):
 
 def teacher(request):
     return render(request,'teacher_index.html')
+
+def addStudent(request):
+    return render(request,'addStudent.html')
+
+def addData(request):
+    return render(request,'addData.html')
