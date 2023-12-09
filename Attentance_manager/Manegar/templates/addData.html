@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
 {% block body %}
-In addData html file
+<form method = "post">
+    {% csrf_token %}
+    <input type="text" placeholder="SUBJECT NAME" name="subjectName">
+    <input type="text" placeholder="SUBJECT CODE" name="subjectCode">
+    <button type="submit">Submit</button>
+</form>
 {% endblock %}

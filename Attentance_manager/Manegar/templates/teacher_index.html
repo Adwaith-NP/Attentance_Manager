@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+<h4>User name : {{user.username}}</h4>
 <a href="{% url "manager:addData" %}">
 <button>Add subject</button>
 </a>

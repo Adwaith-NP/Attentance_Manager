@@ -10,7 +10,7 @@ class CustumAdmin(UserAdmin):
         )
     
     fieldsets = UserAdmin.fieldsets + (
-        ('Custom Fields',{'fields': ('is_teacher', 'is_student','teacher_id')}),
+        ('Custom Fields',{'fields': ('is_teacher', 'is_student','teacher_id','batch_id')}),
     )
     
 
