@@ -1,8 +1,11 @@
 <form method="post">
     {% csrf_token %}
-    <input type="text" placeholder="username" name = "username">
-    <input type="text" placeholder="Name of the student" name = "name">
-    <input type="text" placeholder="Batch ID" name = "batchID">
-    <input type="text" placeholder="Password" name = "password">
+    <input type="text" placeholder="username" name = "username"><br>
+    <input type="text" placeholder="Name of the student" name = "name"><br>
+    {% for batch in batchID %}
+    <input type="radio" value="{{ batch.batchCode }}" name="batchID"><label for="huey">{{ batch.batchCode }}</label><br>
+    {% endfor %}
+
+    <input type="text" placeholder="Password" name = "password"><br>
     <button type="submit">Submit</button>
 </form>
