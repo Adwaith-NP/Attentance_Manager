@@ -11,7 +11,7 @@ from Manegar.models import subjectData
 @login_required
 def register(request):
     try:
-        subject_data = subjectData.objects.filter(user = request.user)
+        subject_data = subjectData.objects.filter(teacher_id = request.user)
     except subject_data.DoesNotExist:
         subject_data = None
     if request.user.is_teacher :
@@ -19,12 +19,12 @@ def register(request):
         if request.method == 'POST':
             username = request.POST['username']
             name = request.POST['name']
-            # batchID = request.POST['batchID']
+            batchID = request.POST['batchID']
             password = request.POST['password']
             if loginData.objects.filter(username = username).exists():
                 messages.warning(request, "Username Taken")
             else:
-                student = loginData(username = username,first_name = name,password = password,teacher_id = request.user.username)
+                student = loginData(username = username,first_name = name,password = password,teacher_id = request.user.username,batch_id=batchID)
                 student.save()
                 messages.success(request, "Username added")
                 return redirect('UserApp:register')

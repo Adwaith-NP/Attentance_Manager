@@ -1,1 +1,15 @@
-Its subect edi portal
+<a href="{% url "manager:studentAddToSub" subCode batchCode %}">
+    <button>Add students</button>
+</a>
+
+<!-- <a href="{% url "UserApp:register" %}">
+    <button>Add Attendance Date</button>
+</a> -->
+
+{% for student in student_name %}
+<div style="margin-top: 10px;border : solid">
+    <!-- {{student.studentId}} -->
+    ID : {{student.0}}<br>
+    Name : {{student.1}}
+</div>
+{% endfor %}

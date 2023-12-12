@@ -5,7 +5,7 @@ from User.models import loginData
 # Create your models here.
 
 class subjectData(models.Model):
-    user = models.ForeignKey(loginData,on_delete=models.CASCADE,default=1)
+    teacher_id = models.ForeignKey(loginData,on_delete=models.CASCADE,default=1)
     subjectName = models.CharField(max_length=50)
     batchCode = models.CharField(max_length=20)
     subjectCode = models.CharField(max_length=20)
@@ -16,5 +16,13 @@ class subjectData(models.Model):
 class subjectStudentData(models.Model):
     subjectCode = models.ForeignKey(subjectData,on_delete=models.CASCADE)
     studentId = models.CharField(max_length=30)
+    def __str__(self):
+        return self.studentId
+    
+class attendanceDate(models.Model):
+    subjectCode = models.ForeignKey(subjectData,on_delete=models.CASCADE)
     attendanceDate = models.DateField()
+    studentId = models.CharField(max_length=30)
+    def __str__(self):
+        return self.subjectCode
     

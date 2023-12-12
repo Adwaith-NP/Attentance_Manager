@@ -1,0 +1,12 @@
+<form method="post">
+    {% csrf_token %}
+    {% for student in sudentList %}
+        <div style="margin-top: 10px;border:solid">
+            <p>Name : {{ student.first_name }}</p>
+            <p>ID : {{ student.username }}</p>
+            <label>Remove</label>
+            <input type="checkbox" value="{{ student.username }}" name = "removedStudentList">
+        </div>
+    {% endfor %}
+    <button type="submit">Set All</button>
+</form>
