@@ -1,12 +1,39 @@
-<form method="post">
-    {% csrf_token %}
-    {% for student in sudentList %}
-        <div style="margin-top: 10px;border:solid">
-            <p>Name : {{ student.first_name }}</p>
-            <p>ID : {{ student.username }}</p>
-            <label>Remove</label>
-            <input type="checkbox" value="{{ student.username }}" name = "removedStudentList">
-        </div>
-    {% endfor %}
-    <button type="submit">Set All</button>
-</form>
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <script>
+            function selectAllCheckboxes() {
+                // Get all checkboxes by their name attribute
+                var checkboxes = document.getElementsByName("addedStudentList");
+    
+                // Loop through checkboxes and set the "checked" property to true
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = true;
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <form method="post">
+            {% csrf_token %}
+            {% for student in sudentList %}
+                <div style="margin-top: 10px;border:solid">
+                    <p>Name : {{ student.first_name }}</p>
+                    <p>ID : {{ student.username }}</p>
+                    <label>Add</label>
+                    <input type="checkbox" value="{{ student.username }}" name = "addedStudentList">
+                </div>
+            {% endfor %}
+            <button type="submit">submit</button>
+            <button type="button" onclick="selectAllCheckboxes()">Set All</button>
+        </form>
+    </body>
+</html>
+

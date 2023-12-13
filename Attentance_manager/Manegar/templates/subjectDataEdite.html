@@ -5,11 +5,28 @@
 <!-- <a href="{% url "UserApp:register" %}">
     <button>Add Attendance Date</button>
 </a> -->
-
-{% for student in student_name %}
-<div style="margin-top: 10px;border : solid">
-    <!-- {{student.studentId}} -->
-    ID : {{student.0}}<br>
-    Name : {{student.1}}
+<form method="post" name="attendanceForm">
+    {% csrf_token %}
+    <input type="date" placeholder="00/00/00" name = 'date' required>
+    <button type="submit" name="attendanceForm">Submit</button>
+</form>
+<div style="margin-top: 20px;">
+    <form method="post" name = "attendance">
+        {% csrf_token %}
+        <h4 style="display: inline-block;margin-left:178px">{{new_date.attendanceDate}}</h4>
+        {% for student in student_name %}
+            <div style="margin-top: 10px;border : solid;width : 300px;">
+                <div style="display: inline-block;width : 150px;">
+                    ID : {{student.0}}<br>
+                    Name : {{student.1}}
+                </div>
+                <div style="margin-left: 50px;display: inline-block;">
+                    <input style="width: 30px;height : 20px" type="checkbox" name="student_attendance" value="{{ student.0 }}">
+                </div>
+            </div>
+        {% endfor %}
+        <div style="margin-top: 20px;">
+            <button type="submit" name = "attendance">Submit</button>
+        </div>
+    </form>
 </div>
-{% endfor %}

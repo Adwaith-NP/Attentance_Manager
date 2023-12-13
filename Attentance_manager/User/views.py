@@ -11,7 +11,7 @@ from Manegar.models import subjectData
 @login_required
 def register(request):
     try:
-        subject_data = subjectData.objects.filter(teacher_id = request.user)
+        subject_data = subjectData.objects.filter(username = request.user)
     except subject_data.DoesNotExist:
         subject_data = None
     if request.user.is_teacher :

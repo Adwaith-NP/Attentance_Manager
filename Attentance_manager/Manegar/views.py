@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from User.models import loginData
 from django.urls import reverse
+from datetime import datetime
 # from django.contrib.auth import get_user_model as Users
 
 # Create your views here.
@@ -25,7 +26,7 @@ def student(request):
 def teacher(request):
     if request.user.is_teacher :
         try:
-            subject_data = subjectData.objects.filter(teacher_id = request.user)
+            subject_data = subjectData.objects.filter(username = request.user)
         except subject_data.DoesNotExist:
             subject_data = None
         return render(request,'teacher_index.html',{'subject':subject_data})
@@ -38,6 +39,29 @@ def subjectDataSection(request,subCode,batchCode):
     if request.user.is_teacher:
         subjectData_instance = subjectData.objects.get(subjectCode = subCode)
         added_student = subjectStudentData.objects.filter(subjectCode = subjectData_instance)
+        
+        #collecting the attendance date
+        if request.method == 'POST' and 'attendanceForm' in request.POST:
+            attendance_date = request.POST.get('date', None)
+            print(attendance_date)
+            try:
+                # Attempt to parse the date string, attendance_date covert the collected date to the datetime.date function 
+                attendance_date = datetime.strptime(attendance_date, '%Y-%m-%d').date()
+                if attendanceDate.objects.filter(attendanceDate = attendance_date).exists():
+                    messages.warning(request,'date alrady added')
+                else:
+                    save_data = attendanceDate(subjectCode = subjectData_instance,attendanceDate = attendance_date)
+                    save_data.save()
+            except ValueError:
+                messages.warning(request, 'Invalid date format. Please use YYYY-MM-DD.')
+        #collect the student attendance
+        if request.method == 'POST' and 'attendance' in request.POST:
+            pass
+        
+        # latest_created_date store the latest uploaded date
+        latest_created_date = attendanceDate.objects.filter(subjectCode = subjectData_instance).latest('attendanceDate')
+        
+        #list out student ID and student Name
         student_names = []
         for student_name in added_student:
             name = loginData.objects.get(username = student_name.studentId)
@@ -47,6 +71,7 @@ def subjectDataSection(request,subCode,batchCode):
             'batchCode':batchCode,
             'added_student' : added_student,
             'student_name' : student_names,
+            'new_date' : latest_created_date
             }
         return render(request,'subjectDataEdite.html',data)
     else:
@@ -65,7 +90,7 @@ def addSubjectData(request):
                 return redirect('manager:addData')
             else:
                 user = request.user
-                data = subjectData(subjectName = subject_name,batchCode = batchCode,teacher_id = user,subjectCode = subject_code)
+                data = subjectData(subjectName = subject_name,batchCode = batchCode,username = user,subjectCode = subject_code)
                 data.save()
                 return redirect('manager:teacher')
     else:
@@ -78,17 +103,25 @@ def studentAddToSub(request,subCode,batchCode):
     if request.user.is_teacher :
         if request.method == 'POST':
             #for cheking the student was remove or not and adding to the data to subjectStudentData data base
-            removed_student_list = request.POST.getlist('removedStudentList')
+            added_student_list = request.POST.getlist('addedStudentList')
             subject_instance = subjectData.objects.get(subjectCode=subCode) # subject_instance store the instance of subjectCode for creating a foreignkey
             for student in loginData.objects.filter(batch_id = batchCode):
-                if student.username not in removed_student_list:
-                    try:
-                        selected_student = subjectStudentData(subjectCode = subject_instance,studentId = student.username)
-                        selected_student.save()
-                    except:
-                        print('error')
+                if student.username in added_student_list:
+                    if subjectStudentData.objects.filter(studentId = student.username).exists():
+                        pass
+                    else:
+                        try:
+                            selected_student = subjectStudentData(subjectCode = subject_instance,studentId = student.username)
+                            selected_student.save()
+                        except:
+                            print('error')
             return redirect(reverse('manager:subjectDataEdit', args=[subCode,batchCode]))
-        sudentList = loginData.objects.filter(batch_id = batchCode)
-        return render(request,'studentAddToSub.html',{'sudentList':sudentList})
+        #collect all student data from loginData database that filter with batch_id
+        subject_instance = subjectData.objects.get(subjectCode=subCode)
+        studentList = loginData.objects.filter(batch_id = batchCode)
+        addedStudents = subjectStudentData.objects.filter(subjectCode = subject_instance)
+        added_student_ids = [student.studentId for student in addedStudents]
+        filtered_student_list = studentList.exclude(username__in=added_student_ids)
+        return render(request,'studentAddToSub.html',{'sudentList':filtered_student_list})
     else:
         return redirect('login')
