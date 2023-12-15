@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect
-from .models import subjectData,subjectStudentData,attendanceDate
+from .models import subjectData,subjectStudentData,attendanceDate,attendance
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from User.models import loginData
@@ -59,13 +59,34 @@ def subjectDataSection(request,subCode,batchCode):
             pass
         
         # latest_created_date store the latest uploaded date
-        latest_created_date = attendanceDate.objects.filter(subjectCode = subjectData_instance).latest('attendanceDate')
+        try:
+            latest_created_date = attendanceDate.objects.filter(subjectCode = subjectData_instance).latest('pk')
+        except attendanceDate.DoesNotExist:
+            latest_created_date = None
         
         #list out student ID and student Name
         student_names = []
         for student_name in added_student:
             name = loginData.objects.get(username = student_name.studentId)
             student_names.append((student_name.studentId,name.first_name))
+            
+        #collect the student attendance
+        if request.method == 'POST' and 'attendance' in request.POST:
+            presentStudentID = request.POST.getlist('student_attendance')
+            for studentID,student_name in student_names:
+                if attendance.objects.filter(attendanceDate = latest_created_date,studentId = studentID).exists():
+                    messages.warning(request,'error')
+                else:
+                    if studentID in presentStudentID:
+                        addAttendence = attendance(attendanceDate = latest_created_date,studentId = studentID,attendance = True)
+                        addAttendence.save()
+                    else:
+                        addAttendence = attendance(attendanceDate = latest_created_date,studentId = studentID)
+                        addAttendence.save()    
+            
+        if latest_created_date and attendance.objects.filter(attendanceDate = latest_created_date).exists():
+            latest_created_date = None
+            
         data = {
             'subCode':subCode,
             'batchCode':batchCode,

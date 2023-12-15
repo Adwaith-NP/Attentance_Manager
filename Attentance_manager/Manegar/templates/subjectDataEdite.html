@@ -1,32 +1,57 @@
-<a href="{% url "manager:studentAddToSub" subCode batchCode %}">
-    <button>Add students</button>
-</a>
-
-<!-- <a href="{% url "UserApp:register" %}">
-    <button>Add Attendance Date</button>
-</a> -->
-<form method="post" name="attendanceForm">
-    {% csrf_token %}
-    <input type="date" placeholder="00/00/00" name = 'date' required>
-    <button type="submit" name="attendanceForm">Submit</button>
-</form>
-<div style="margin-top: 20px;">
-    <form method="post" name = "attendance">
-        {% csrf_token %}
-        <h4 style="display: inline-block;margin-left:178px">{{new_date.attendanceDate}}</h4>
-        {% for student in student_name %}
-            <div style="margin-top: 10px;border : solid;width : 300px;">
-                <div style="display: inline-block;width : 150px;">
-                    ID : {{student.0}}<br>
-                    Name : {{student.1}}
-                </div>
-                <div style="margin-left: 50px;display: inline-block;">
-                    <input style="width: 30px;height : 20px" type="checkbox" name="student_attendance" value="{{ student.0 }}">
-                </div>
-            </div>
-        {% endfor %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <a href="{% url "manager:studentAddToSub" subCode batchCode %}">
+            <button>Add students</button>
+        </a>
+        
+        <!-- <a href="{% url "UserApp:register" %}">
+            <button>Add Attendance Date</button>
+        </a> -->
+        <form method="post" name="attendanceForm">
+            {% csrf_token %}
+            <input type="date" placeholder="00/00/00" name = 'date' required>
+            <button type="submit" name="attendanceForm">Submit</button>
+        </form>
         <div style="margin-top: 20px;">
-            <button type="submit" name = "attendance">Submit</button>
+            <form method="post" name = "attendance" >
+                {% csrf_token %}
+                {% if new_date.attendanceDate != None %}
+                <h4 style="display: inline-block;margin-left:178px">{{new_date.attendanceDate}}</h4>
+                {% else %}
+                <h4 style="display: inline-block;margin-left:178px">00/00/00</h4>
+                {% endif %}
+                {% for student in student_name %}
+                    <div style="margin-top: 10px;border : solid;width : 300px;">
+                        <div style="display: inline-block;width : 150px;">
+                            ID : {{student.0}}<br>
+                            Name : {{student.1}}
+                        </div>
+                        <div style="margin-left: 50px;display: inline-block;">
+                            {% if new_date.attendanceDate != None %}
+                            <input style="width: 30px;height : 20px" type="checkbox" name="student_attendance" value="{{ student.0 }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div style="margin-top: 20px;">
+                    {% if new_date.attendanceDate != None %}
+                    <button type="submit" name = "attendance">Submit</button>
+                    {% endif %}
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+    </body>
+</html>
