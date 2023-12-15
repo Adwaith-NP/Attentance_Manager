@@ -13,6 +13,9 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
+        <a href="{% url "manager:teacher" %}">
+            <button>Back</button>
+        </a><br><br>
         <a href="{% url "manager:studentAddToSub" subCode batchCode %}">
             <button>Add students</button>
         </a>
@@ -25,7 +28,7 @@
             <input type="date" placeholder="00/00/00" name = 'date' required>
             <button type="submit" name="attendanceForm">Submit</button>
         </form>
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px;display: inline-block;">
             <form method="post" name = "attendance" >
                 {% csrf_token %}
                 {% if new_date.attendanceDate != None %}
@@ -52,6 +55,15 @@
                     {% endif %}
                 </div>
             </form>
+        </div>
+
+        <div style="display: block;width : 150px;float: right;margin-top : 35px;">
+            <h3 style="margin-left: 25px;">Saved date</h3>
+            {% for date in savedDate %}
+                <div style="display: flex;width : 150px;border-style : solid;margin-top:15px;height:30px;align-items: center; justify-content: center; ">
+                <p>{{date.attendanceDate}}</p>
+                </div>
+            {% endfor %}
         </div>
     </body>
 </html>

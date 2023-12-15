@@ -83,16 +83,21 @@ def subjectDataSection(request,subCode,batchCode):
                     else:
                         addAttendence = attendance(attendanceDate = latest_created_date,studentId = studentID)
                         addAttendence.save()    
-            
+        # if the top list date is stored alrady in attendance database the latest_created_date go to None
         if latest_created_date and attendance.objects.filter(attendanceDate = latest_created_date).exists():
             latest_created_date = None
+            
+        # saveDate store all saved date in attendanceDate database
+        savedDate = attendanceDate.objects.filter(subjectCode = subjectData_instance).order_by('-pk')
+        
             
         data = {
             'subCode':subCode,
             'batchCode':batchCode,
             'added_student' : added_student,
             'student_name' : student_names,
-            'new_date' : latest_created_date
+            'new_date' : latest_created_date,
+            'savedDate' : savedDate,
             }
         return render(request,'subjectDataEdite.html',data)
     else:
