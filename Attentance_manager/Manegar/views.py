@@ -37,7 +37,7 @@ def teacher(request):
 @login_required
 def subjectDataSection(request,subCode,batchCode):
     if request.user.is_teacher:
-        subjectData_instance = subjectData.objects.get(subjectCode = subCode)
+        subjectData_instance = subjectData.objects.get(subjectCode = subCode,batchCode = batchCode)
         added_student = subjectStudentData.objects.filter(subjectCode = subjectData_instance)
         
         #collecting the attendance date
@@ -47,7 +47,7 @@ def subjectDataSection(request,subCode,batchCode):
             try:
                 # Attempt to parse the date string, attendance_date covert the collected date to the datetime.date function 
                 attendance_date = datetime.strptime(attendance_date, '%Y-%m-%d').date()
-                if attendanceDate.objects.filter(attendanceDate = attendance_date).exists():
+                if attendanceDate.objects.filter(attendanceDate = attendance_date,subjectCode = subjectData_instance).exists():
                     messages.warning(request,'date alrady added')
                 else:
                     save_data = attendanceDate(subjectCode = subjectData_instance,attendanceDate = attendance_date)
@@ -130,10 +130,10 @@ def studentAddToSub(request,subCode,batchCode):
         if request.method == 'POST':
             #for cheking the student was remove or not and adding to the data to subjectStudentData data base
             added_student_list = request.POST.getlist('addedStudentList')
-            subject_instance = subjectData.objects.get(subjectCode=subCode) # subject_instance store the instance of subjectCode for creating a foreignkey
+            subject_instance = subjectData.objects.get(subjectCode=subCode,batchCode = batchCode) # subject_instance store the instance of subjectCode for creating a foreignkey
             for student in loginData.objects.filter(batch_id = batchCode):
                 if student.username in added_student_list:
-                    if subjectStudentData.objects.filter(studentId = student.username).exists():
+                    if subjectStudentData.objects.filter(studentId = student.username,subjectCode = subject_instance).exists():
                         pass
                     else:
                         try:
