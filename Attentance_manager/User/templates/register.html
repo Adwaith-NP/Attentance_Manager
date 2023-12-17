@@ -1,9 +1,13 @@
+<a href="{% url "manager:teacher" %}">
+    <button>Back</button>
+</a><br><br>
+
 <form method="post">
     {% csrf_token %}
     <input type="text" placeholder="username" name = "username"><br>
     <input type="text" placeholder="Name of the student" name = "name"><br>
     {% for batch in batchID %}
-    <input type="radio" value="{{ batch.batchCode }}" name="batchID"><label for="huey">{{ batch.batchCode }}</label><br>
+    <input type="radio" value="{{ batch.batchCode }}" name="batchID"><label for="huey">{{ batch }}</label><br>
     {% endfor %}
 
     <input type="text" placeholder="Password" name = "password"><br>

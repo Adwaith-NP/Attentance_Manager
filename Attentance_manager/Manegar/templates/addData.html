@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block body %}
+<a href="{% url "manager:teacher" %}">
+    <button>Back</button>
+</a><br><br>
 <form method = "post">
     {% csrf_token %}
     <input type="text" placeholder="SUBJECT NAME" name="subjectName">

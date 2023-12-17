@@ -11,7 +11,7 @@ from datetime import datetime
 @login_required
 def conveter(request):
     if request.user.is_authenticated and request.user.is_student :
-        print('I am a student')
+        return redirect('student_App:student')
     elif request.user.is_authenticated and request.user.is_teacher :
         return redirect('manager:teacher')
         

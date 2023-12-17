@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <p>Hello {{user.first_name}}</p>
+
+        <p>Tottal Attandence presentage : {{TottalPrecentage}}</p>
+        {% for subject in subjectAllData %}
+            <div style="width: 280px;border-style : solid;margin-top:20px">
+            <p>Subject name : {{subject.attendanceDate__subjectCode__subjectName}}</p>
+            <p>Tottal class taken : {{subject.attendance_count_total}}</p>
+            <p>Attented class : {{subject.attendance_count_as_present}}</p>
+            <p>Tottal Attandence presentage : {{subject.attendencePrecentage}}</p>
+            </div>
+        {% endfor %}
+
+        <script src="" async defer></script>
+    </body>
+</html>

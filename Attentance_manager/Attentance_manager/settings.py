@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "student.apps.StudentConfig",
     "Manegar.apps.ManegarConfig",
     "User.apps.UserConfig",
     "django.contrib.admin",

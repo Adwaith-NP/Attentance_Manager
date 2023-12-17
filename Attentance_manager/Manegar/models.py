@@ -8,7 +8,7 @@ class subjectData(models.Model):
     username = models.ForeignKey(loginData,on_delete=models.CASCADE,default=1)
     subjectName = models.CharField(max_length=50)
     batchCode = models.CharField(max_length=20)
-    subjectCode = models.CharField(max_length=20)
+    subjectCode = models.CharField(max_length=20,unique=True)
     
     def __str__(self):
         return self.subjectName
