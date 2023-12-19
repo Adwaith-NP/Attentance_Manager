@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <<![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -20,9 +16,6 @@
             <button>Add students</button>
         </a>
         
-        <!-- <a href="{% url "UserApp:register" %}">
-            <button>Add Attendance Date</button>
-        </a> -->
         <form method="post" name="attendanceForm">
             {% csrf_token %}
             <input type="date" placeholder="00/00/00" name = 'date' required>
@@ -60,8 +53,14 @@
         <div style="display: block;width : 150px;float: right;margin-top : 35px;">
             <h3 style="margin-left: 25px;">Saved date</h3>
             {% for date in savedDate %}
-                <div style="display: flex;width : 150px;border-style : solid;margin-top:15px;height:30px;align-items: center; justify-content: center; ">
+                <div style="display: flex;width : 150px;border-style : solid;margin-top:15px;height:50px;align-items: center; justify-content: center; ">
                 <p>{{date.attendanceDate}}</p>
+                {% if date.additional != 0 %}
+                <p>({{date.additional}})</p>
+                {% endif %}
+                <a href="{% url "manager:attendance_edit" subCode date.additional %}">
+                More info
+                </a>
                 </div>
             {% endfor %}
         </div>

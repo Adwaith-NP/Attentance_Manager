@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from User.models import loginData
 from django.urls import reverse
 from datetime import datetime
+from django.http import HttpResponseRedirect
 # from django.contrib.auth import get_user_model as Users
 
 # Create your views here.
@@ -48,15 +49,18 @@ def subjectDataSection(request,subCode,batchCode):
                 # Attempt to parse the date string, attendance_date covert the collected date to the datetime.date function 
                 attendance_date = datetime.strptime(attendance_date, '%Y-%m-%d').date()
                 if attendanceDate.objects.filter(attendanceDate = attendance_date,subjectCode = subjectData_instance).exists():
-                    messages.warning(request,'date alrady added')
+                    attendanceDate_instance = attendanceDate.objects.filter(attendanceDate=attendance_date).order_by('-pk').first()
+                    additional_class = attendanceDate_instance.additional
+                    additional_class += 1
+                    save_data = attendanceDate(subjectCode = subjectData_instance,attendanceDate = attendance_date,additional = additional_class)
+                    save_data.save()
                 else:
                     save_data = attendanceDate(subjectCode = subjectData_instance,attendanceDate = attendance_date)
                     save_data.save()
+                return HttpResponseRedirect(request.path_info)
             except ValueError:
+                print('error')
                 messages.warning(request, 'Invalid date format. Please use YYYY-MM-DD.')
-        #collect the student attendance
-        if request.method == 'POST' and 'attendance' in request.POST:
-            pass
         
         # latest_created_date store the latest uploaded date
         try:
@@ -82,13 +86,14 @@ def subjectDataSection(request,subCode,batchCode):
                         addAttendence.save()
                     else:
                         addAttendence = attendance(attendanceDate = latest_created_date,studentId = studentID)
-                        addAttendence.save()    
+                        addAttendence.save()
+            return HttpResponseRedirect(request.path_info)    
         # if the top list date is stored alrady in attendance database the latest_created_date go to None
         if latest_created_date and attendance.objects.filter(attendanceDate = latest_created_date).exists():
             latest_created_date = None
             
         # saveDate store all saved date in attendanceDate database
-        savedDate = attendanceDate.objects.filter(subjectCode = subjectData_instance).order_by('-pk')
+        savedDates = attendanceDate.objects.filter(subjectCode = subjectData_instance).order_by('-pk')
         
             
         data = {
@@ -97,7 +102,7 @@ def subjectDataSection(request,subCode,batchCode):
             'added_student' : added_student,
             'student_name' : student_names,
             'new_date' : latest_created_date,
-            'savedDate' : savedDate,
+            'savedDate' : savedDates,
             }
         return render(request,'subjectDataEdite.html',data)
     else:
@@ -151,3 +156,7 @@ def studentAddToSub(request,subCode,batchCode):
         return render(request,'studentAddToSub.html',{'sudentList':filtered_student_list})
     else:
         return redirect('login')
+    
+def attendance_edit(request,subCode,index,):
+    print(subCode,index)
+    return render(request,'attendance.html') 

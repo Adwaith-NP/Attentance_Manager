@@ -10,4 +10,5 @@ urlpatterns = [
     path('add_data/',views.addSubjectData,name = 'addData'),
     path('subjectDataEdit/<str:subCode>/<str:batchCode>/',views.subjectDataSection,name='subjectDataEdit'),
     path('studentAddToSub/<str:subCode>/<str:batchCode>/',views.studentAddToSub,name="studentAddToSub"),
+    path('attendence_edit/<str:subCode>/<str:index>/',views.attendance_edit,name='attendance_edit'),
 ]

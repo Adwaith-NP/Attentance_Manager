@@ -22,6 +22,7 @@ class subjectStudentData(models.Model):
 class attendanceDate(models.Model):
     subjectCode = models.ForeignKey(subjectData,on_delete=models.CASCADE)
     attendanceDate = models.DateField()
+    additional = models.IntegerField(default=0)
     def __str__(self):
         return str(self.subjectCode)
     
